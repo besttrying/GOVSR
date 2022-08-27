@@ -1,0 +1,52 @@
+function: 'test' #train, test, eval_checkpoint, get_complexity
+
+path:
+  base: './'
+  train: '/home/chloe/yipeng/data/data_txt/mm522_train.txt'
+  eval: ['/home/chloe/yipeng/data/vsr/test/test2/vid4', '/home/chloe/yipeng/data/vsr/test/test2/udm10'] # # # #
+  test: '/home/chloe/yipeng/data/vsr/test/graduate/eval20'
+  checkpoint: 'checkpoint'
+  eval_result: 'eval'
+
+train:
+  gpus: [1,0,2]
+  resume: 786
+  num_frame: 28
+  sub_frame: 0
+  batch_size: 9
+  in_size: 64
+  init_lr: 0.8e-3
+  final_lr: 0.1e-4
+  loss: 'cha_loss' #cha_loss, MSELoss, L1Loss
+  num_epochs: 1800
+  epoch_decay: 240
+  num_workers: 9
+  iter_per_epoch: 500
+  display_iter: 20
+  epoch: 0 #current eopch, updated during training
+
+eval:
+  color: 'ycbcr'
+  num_workers: 4
+  batch_size: 1
+  world_size: 4
+
+test:
+  save_name: 'eilovsr_3iter' #'pfovsr_s_lnl+spynet+deformconv_bilinear_4+2_64'
+  self_ensemble: 1
+  test_batch_size: 1
+
+model:
+  file: 'eiovsr_3iter' #'pfovsr_s_lnl+spynet+deformconv_bilinear'
+  name: 'eilovsr_3iter' #'pfovsr_s_lnl+spynet+deformconv_bilinear_4+2_64' #'pfovsr_s_lnl_k1'
+  kind: 'global'
+  mode: ['forward_0', 'forward_1', 'forward_2']
+  num_frame: 3
+  scale: 4
+  num_pb: 4
+  num_sb: 2
+  basic_filter: 64
+  rb_filter: 288
+  alignment_filter: 144
+
+extra_info: 'precision 16'
